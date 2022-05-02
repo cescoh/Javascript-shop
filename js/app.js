@@ -16,12 +16,9 @@ const boton = document.getElementById("buscar"); */
 
 mostrarInfo(pozosDB);
 
-filtroArea.addEventListener('change',()=>{
-    if(filtroArea.value == "all"){
-        mostrarInfo(pozosDB);
-    }else{
-        mostrarInfo(pozosDB.filter(elemento => elemento.Area == filtroArea.value));
-    }
+//UTILIZACION DE OPERADOR TERNARIO
+filtroArea.addEventListener('change', () => {
+    filtroArea.value == "all" ? mostrarInfo(pozosDB) : mostrarInfo(pozosDB.filter(elemento => elemento.Area == filtroArea.value))
 });
 
 function mostrarInfo(array) {
@@ -51,8 +48,8 @@ function mostrarInfo(array) {
 }
 
 function agregarAlCarrito(id) {
-    let yaEsta = carritoDeCompras.find(item=> item.id ==id)
-    if(yaEsta){
+    let yaEsta = carritoDeCompras.find(item => item.id == id)
+    if (yaEsta) {
         Toastify({
             text: "Ya tienes esta informacion en el carrito",
             duration: 3000,
@@ -62,18 +59,18 @@ function agregarAlCarrito(id) {
             position: "right",
             stopOnFocus: true,
             style: {
-              background: "linear-gradient(to right, 06006e, #000000,#007a93)",
+                background: "linear-gradient(to right, 06006e, #000000,#007a93)",
             },
-            onClick: function(){}
-          }).showToast();
+            onClick: function () {}
+        }).showToast();
         return;
-    } else{
-    let productoAgregar = pozosDB.find(elemento => elemento.id == id);
-    carritoDeCompras.push(productoAgregar);
-    actualizarCarrito()
-    mostrarCarrito(productoAgregar);
-}
-localStorage.setItem('Pedido', JSON.stringify(carritoDeCompras));
+    } else {
+        let productoAgregar = pozosDB.find(elemento => elemento.id == id);
+        carritoDeCompras.push(productoAgregar);
+        actualizarCarrito()
+        mostrarCarrito(productoAgregar);
+    }
+    localStorage.setItem('Pedido', JSON.stringify(carritoDeCompras));
 }
 
 function mostrarCarrito(productoAgregar) {
@@ -92,35 +89,65 @@ function mostrarCarrito(productoAgregar) {
 
     btnEliminar.addEventListener('click', () => {
         btnEliminar.parentElement.remove()
-        carritoDeCompras = carritoDeCompras.filter(item=> item.id != productoAgregar.id)
+        carritoDeCompras = carritoDeCompras.filter(item => item.id != productoAgregar.id)
         actualizarCarrito()
         localStorage.setItem('Pedido', JSON.stringify(carritoDeCompras));
     })
     let btnLimpiar = document.getElementById('limpiar');
-    /* btnLimpiar.addEventListener('click',()=> {
-        document.getElementById('carrito-contenedor').remove();
+    btnLimpiar.addEventListener('click', () => {
+        btnEliminar.parentElement.remove()
         carritoDeCompras = [];
         actualizarCarrito();
         localStorage.setItem('Pedido', JSON.stringify(carritoDeCompras));
-    }) */
+    })
+
+    let pedidoCompleto = document.getElementById("completo");
+
+    pedidoCompleto.addEventListener('click', () => {
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Su pedido ah sido enviado',
+            showConfirmButton: false,
+            timer: 1500
+        });
+        btnEliminar.parentElement.remove();
+        carritoDeCompras = [];
+        actualizarCarrito();
+        localStorage.setItem('Pedido', JSON.stringify(carritoDeCompras));
+        setTimeout(() => {
+            location.reload();
+        }, 1500);
+    });
 }
 
 
 function actualizarCarrito() {
     contadorItems.innerText = carritoDeCompras.length;
+    carritoDeCompras.length == 4 && Swal.fire('Realmente necesitas tanto?', 'Por favor, evita la acumulacion de informacion', 'warning');//OPERADOR LOGICO &&
     legajoTotal.innerText = carritoDeCompras.reduce((acc, el) => acc + el.Legajo, 0);
-    perfilesTotal.innerText = carritoDeCompras.reduce((acc,el) => acc + el.Perfiles, 0);
-    sumaTotal.innerText = carritoDeCompras.reduce((acc,el) => acc + (el.Legajo+el.Perfiles), 0);
+    perfilesTotal.innerText = carritoDeCompras.reduce((acc, el) => acc + el.Perfiles, 0);
+    sumaTotal.innerText = carritoDeCompras.reduce((acc, el) => acc + (el.Legajo + el.Perfiles), 0);
 }
 
 function recuperar() {
- let recuperarLS = JSON.parse(localStorage.getItem('Pedido'));
- if(recuperarLS){
-     recuperarLS.forEach(el=>{
-         mostrarCarrito(el)
-         carritoDeCompras.push(el)
-         actualizarCarrito()
-     })
- }
+    let recuperarLS = JSON.parse(localStorage.getItem('Pedido'));
+    if (recuperarLS) {
+        recuperarLS.forEach(el => {
+            mostrarCarrito(el)
+            carritoDeCompras.push(el)
+            actualizarCarrito()
+        })
+    }
 }
+setTimeout(() => {
+    Swal.fire({
+        imageUrl: 'https://todopago.com.ar/sites/todopago.com.ar/files/animacion-nuevo2.gif',
+        width: 580,
+        imageWidth: 580,
+        imageHeight: 325,
+        imageAlt: 'gifpropaganda',
+        showConfirmButton: false,
+    })
+}, 3000);
 recuperar()
