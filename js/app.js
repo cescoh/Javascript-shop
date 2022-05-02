@@ -144,6 +144,7 @@ setTimeout(() => {
     Swal.fire({
         imageUrl: 'https://todopago.com.ar/sites/todopago.com.ar/files/animacion-nuevo2.gif',
         width: 580,
+        height: 325,
         imageWidth: 580,
         imageHeight: 325,
         imageAlt: 'gifpropaganda',
