@@ -41,7 +41,8 @@ function mostrarInfo(array) {
         </div>`
         contenedorPozo.appendChild(div) //AGREGA LA INFO DEL ARRAY AL ESQUEMA CARD
         let btnAgregar = document.getElementById(`Agregar${item.id}`) //LE DA IDENTIDAD AL BOTON AGREGAR A CARRITO CON EL ID DEL POZO
-        btnAgregar.addEventListener("click", () => {
+        btnAgregar.addEventListener("click", (e) => {
+            e.preventDefault();
             agregarAlCarrito(item.id);
         })
     });
@@ -87,14 +88,16 @@ function mostrarCarrito(productoAgregar) {
 
     let btnEliminar = document.getElementById(`eliminar${productoAgregar.id}`);
 
-    btnEliminar.addEventListener('click', () => {
+    btnEliminar.addEventListener('click', (e) => {
+        e.preventDefault();
         btnEliminar.parentElement.remove()
         carritoDeCompras = carritoDeCompras.filter(item => item.id != productoAgregar.id)
         actualizarCarrito()
         localStorage.setItem('Pedido', JSON.stringify(carritoDeCompras));
     })
     let btnLimpiar = document.getElementById('limpiar');
-    btnLimpiar.addEventListener('click', () => {
+    btnLimpiar.addEventListener('click', (e) => {
+        e.preventDefault();
         btnEliminar.parentElement.remove()
         carritoDeCompras = [];
         actualizarCarrito();
@@ -103,7 +106,8 @@ function mostrarCarrito(productoAgregar) {
 
     let pedidoCompleto = document.getElementById("completo");
 
-    pedidoCompleto.addEventListener('click', () => {
+    pedidoCompleto.addEventListener('click', (e) => {
+        e.preventDefault();
         Swal.fire({
             position: 'top-end',
             icon: 'success',
