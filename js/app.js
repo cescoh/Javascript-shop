@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 const fetchData = async () => {
-        const res = await fetch("/stockProductos.json")
+        const res = await fetch("stockProductos.json")
         const data = await res.json();
         mostrarInfo(data);
 }
@@ -87,7 +87,7 @@ const filtroA = async () => {
 filtroA();
 
 const agregarAlCarrito = async (id) => {
-        const res = await fetch("/stockProductos.json")
+        const res = await fetch("stockProductos.json")
         const data = await res.json();
         let yaEsta = carritoDeCompras.find(item => item.id == id);
         if (yaEsta) {
